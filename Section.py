@@ -1,5 +1,5 @@
 from Point import Point
-from matplotlib.patches import Polygon
+#from matplotlib.patches import Polygon
 
 
 class Section:
@@ -28,4 +28,3 @@ class Section:
     def __init__(self, points):
         self.points = points
         self.center_of_mass = self.center_calculation()
-

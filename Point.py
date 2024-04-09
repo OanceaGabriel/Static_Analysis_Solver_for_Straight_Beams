@@ -1,4 +1,4 @@
-class Point():
+class Point:
     y = None
     z = None
 
