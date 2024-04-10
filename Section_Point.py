@@ -1,4 +1,4 @@
-class Point:
+class Section_Point:
     y = None
     z = None
 
@@ -6,3 +6,5 @@ class Point:
         self.y = y
         self.z = z
 
+    def display(self):
+        print(f"y={self.y}, z={self.z}")
