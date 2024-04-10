@@ -2,7 +2,7 @@ class Point:
     y = None
     z = None
 
-    def __init__(self, x, y):
-        self.x = x
+    def __init__(self, y, z):
         self.y = y
+        self.z = z
 
