@@ -25,6 +25,7 @@ with open("Problems/Exercise_01.txt", "r") as exercise:
         support = Support(line_raw[2])
         axis_point = Axis_Point(line_raw[0], float(line_raw[1]), support,
                                 float(line_raw[3]), float(line_raw[4]), float(line_raw[5]))
+        print(axis_point.distributed_force)
         axis_points.append(axis_point)
 
 
@@ -55,5 +56,6 @@ section.display()
 section.plot_section()
 for segment in segments:
     print("segment:",segment.point_1.name,segment.point_2.name)
+    print("Distributed force on segment: ",segment.distributed_force)
     print("Shear force in Point 1:",segment.s_function_point_1())
     print("Shear force in Point 2: ", segment.s_function_point_2())

@@ -20,7 +20,7 @@ class Segment:
         if point_1.distributed_force != 0 and point_2.distributed_force != 0:
             self.distributed_force = distributed_force
             x = sp.symbols('x')
-            self.s_function = (self.distributed_force / self.length) * x
+            self.s_function = (self.distributed_force * self.length) * x
         else:
             self.s_function = self.point_1.concentrated_forces
 
