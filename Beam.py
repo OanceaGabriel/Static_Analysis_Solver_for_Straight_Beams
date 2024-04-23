@@ -1,3 +1,5 @@
+import numpy as np
+
 from Section_Point import Section_Point
 from Section import Section
 from Axis_Point import Axis_Point
@@ -30,15 +32,20 @@ with open("Problems/Exercise_01.txt", "r") as exercise:
 def integrity_check(points):
     blocked_dof = 0
     for x_point in points:
-        blocked_dof += 2-x_point.degrees_of_freedom()
+        blocked_dof += 2 - x_point.degrees_of_freedom()
     if blocked_dof > 3:
         print("The problem is statically indeterminate")
         sys.exit()
 
 
 def create_segments(points):
-    for i in range(len(points)-1):
-        segment = Segment(points[i], points[i+1], points[5].distributed_force)
+    previous_shear_force = 0  # This variable saves the shear force in the previous axis point
+    for i in range(len(points) - 1):
+        segment = Segment(points[i], points[i + 1], points[5].distributed_force)
+        print("segment:", segment.point_1.name, segment.point_2.name)
+        segment.s_function = segment.s_function + previous_shear_force
+        previous_shear_force = segment.s_function_point_2()
+        print(segment.s_function)
         segments.append(segment)
 
 
@@ -46,3 +53,7 @@ integrity_check(axis_points)
 create_segments(axis_points)
 section.display()
 section.plot_section()
+for segment in segments:
+    print("segment:",segment.point_1.name,segment.point_2.name)
+    print("Shear force in Point 1:",segment.s_function_point_1())
+    print("Shear force in Point 2: ", segment.s_function_point_2())
