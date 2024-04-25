@@ -58,23 +58,19 @@ def plot_shear_diagram(list_of_segments, beam):
 #         x_values = np.append(x_values,segment.point_2.x)
 #         y_values.append(segment)
 #         plt.plot(x_values, y_values, 'g-')
+    x_values = []
+    y_values = []
+    for segment in list_of_segments:
 
-    x_values = [list_of_segments[0].point_1.x]
-    y_values = [list_of_segments[0].s_function_point_1()]
-
-    for i in range(0,len(list_of_segments)-1):
-        segment = list_of_segments[i]
-
-        x_values.append(segment.point_2.x)
+        x_values.append(segment.point_1.x)
         x = sp.symbols('x')
-        y_values.append(segment.s_function.subs(x,segment.point_2.x))
-
+        y_values.append(segment.s_function_point_1())
         x_values.append(segment.point_2.x)
-        y_values.append(segment.s_function.subs(x,segment.point_2.x))
+        y_values.append(segment.s_function_point_2())
 
-
+    x_values.append(list_of_segments[len(list_of_segments)-1].point_2.x)
+    y_values.append(0)
     plt.plot(x_values,y_values, 'g-')
-
 
     plt.title("Shear forces diagram")
     plt.xlabel("Length of the beam [mm]")
