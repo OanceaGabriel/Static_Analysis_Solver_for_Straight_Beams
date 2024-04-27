@@ -44,7 +44,7 @@ def create_segments(points):
     previous_shear_force = 0  # This variable saves the shear force in the previous axis point
     for i in range(len(points) - 1):
         segment = Segment(points[i], points[i + 1], points[5].distributed_force)
-        segment.s_function = segment.s_function + previous_shear_force
+        segment.shear_function = segment.shear_function + previous_shear_force
         previous_shear_force = segment.s_function_point_2()
         segments.append(segment)
 
@@ -87,7 +87,7 @@ section.plot_section()
 for segment in segments:
     print("segment:", segment.point_1.name, segment.point_2.name)
     print("Distributed force on segment: ", segment.distributed_force)
-    print("Shear function: ", segment.s_function)
+    print("Shear function: ", segment.shear_function)
     print("Shear force in Point 1:", segment.s_function_point_1())
     print("Shear force in Point 2: ", segment.s_function_point_2(), "\n")
 plot_shear_diagram(segments, axis_points)
