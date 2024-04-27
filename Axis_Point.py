@@ -1,4 +1,4 @@
-#from Section import Section
+# from Section import Section
 
 
 class Axis_Point:
@@ -12,7 +12,7 @@ class Axis_Point:
     bending_moments = []
     # Support object
     support = None
-    #Distributed force, to be given to the segment
+    # Distributed force, to be given to the segment
     distributed_force = None
 
     def __init__(self, name, x, support=None, concentrated_force=None, bending_moment=None, distributed_force=None):

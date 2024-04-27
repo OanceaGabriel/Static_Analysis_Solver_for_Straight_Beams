@@ -1,11 +1,12 @@
 class Support:
     name = None
     dof = None
-    #Support types are:
-    #Fixed support(DOF = 0)/Incastrare
-    #Roller support(DOF = 1, horizontal and rotation)/Reazem
-    #Pinned support(DOF = 2 Rotation)/Articulatie
-    #No support(DOF = 3)
+
+    # Support types are:
+    # Fixed support(DOF = 0)/Incastrare
+    # Roller support(DOF = 1, horizontal and rotation)/Reazem
+    # Pinned support(DOF = 2 Rotation)/Articulatie
+    # No support(DOF = 3)
 
     def __init__(self, support):
         self.name = support

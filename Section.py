@@ -9,15 +9,15 @@ class Section:
     center_of_mass = None
     area = None
 
-    #Calculates the section area
+    # Calculates the section area
     def area_calculation(self):
         area = 0
         for i in range(len(self.points_obj) - 1):
             area += self.points_obj[i].y * self.points_obj[i + 1].z - self.points_obj[i + 1].y * self.points_obj[i].z
-        self.area = abs(area)/2
+        self.area = abs(area) / 2
         return abs(area) / 2
 
-    #Calculates the center of mass
+    # Calculates the center of mass
     def center_calculation(self):
         centroid_x = 0
         centroid_y = 0
@@ -38,7 +38,7 @@ class Section:
         self.area = self.area_calculation()
         self.center_of_mass = self.center_calculation()
 
-    #Displays center of mass and area of the section
+    # Displays center of mass and area of the section
     def display(self):
         self.center_of_mass.display()
         print(self.area)
@@ -47,23 +47,23 @@ class Section:
         fig, axis = plt.subplots()
         axis.set_aspect('equal', 'box')
 
-        #Adds the polygon as a patch in the plot axis
+        # Adds the polygon as a patch in the plot axis
         poly_patch = Polygon(self.point_list, closed=True, edgecolor='r', linewidth=2)
         axis.add_patch(poly_patch)
 
-        #Sets the axis limits
+        # Sets the axis limits
         min_x = min(p[0] for p in self.point_list)
         max_x = max(p[0] for p in self.point_list)
         min_y = min(p[1] for p in self.point_list)
         max_y = max(p[1] for p in self.point_list)
-        axis.set_xlim(min_x-1, max_x+1)
-        axis.set_ylim(min_y-1, max_y+1)
+        axis.set_xlim(min_x - 1, max_x + 1)
+        axis.set_ylim(min_y - 1, max_y + 1)
 
-        #Axis labels
+        # Axis labels
         axis.set_xlabel('Y')
         axis.set_ylabel('Z')
 
-        #Shows the plot
+        # Shows the plot
         plt.grid(True)
         plt.title("Section")
         plt.show()
