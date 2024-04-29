@@ -51,7 +51,6 @@ def create_segments(points):
         segment.bending_function = sp.integrate(segment.shear_function,
                                                 x) + segment.point_1.bending_moments + previous_bending_moment
         previous_bending_moment = segment.bending_moment_point_2()
-        print(segment.bending_function)
 
         segments.append(segment)
 
@@ -103,15 +102,15 @@ integrity_check(axis_points)
 create_segments(axis_points)
 section.display()
 section.plot_section()
-for segment in segments:
-    print("\nSegment:", segment.point_1.name, segment.point_2.name)
-    print("Distributed force on segment: ", segment.distributed_force, "\n")
-    print("Shear function: ", segment.shear_function)
-    print("Shear force in Point 1:", segment.shear_function_point_1())
-    print("Shear force in Point 2: ", segment.shear_function_point_2(), "\n")
-    print("Bending moment function: ", segment.bending_function)
-    print("Bending moment in Point 1:", segment.bending_moment_point_1())
-    print("Bending moment in Point 2: ", segment.bending_moment_point_2(), "\n")
+# for segment in segments:
+#     print("\nSegment:", segment.point_1.name, segment.point_2.name)
+#     print("Distributed force on segment: ", segment.distributed_force, "\n")
+#     print("Shear function: ", segment.shear_function)
+#     print("Shear force in Point 1:", segment.shear_function_point_1())
+#     print("Shear force in Point 2: ", segment.shear_function_point_2(), "\n")
+#     print("Bending moment function: ", segment.bending_function)
+#     print("Bending moment in Point 1:", segment.bending_moment_point_1())
+#     print("Bending moment in Point 2: ", segment.bending_moment_point_2(), "\n")
 
 plot_shear_diagram(segments)
 plot_bending_diagram(segments)
