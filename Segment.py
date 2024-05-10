@@ -24,7 +24,7 @@ class Segment:
             self.distributed_force = distributed_force
             self.shear_function = self.distributed_force * x
         else:
-            self.shear_function = sp.sympify(0*x + self.point_1.concentrated_forces)
+            self.shear_function = sp.sympify(0*x + self.point_1.concentrated_force)
 
         self.bending_function = sp.integrate(self.shear_function, x)
 
