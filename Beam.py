@@ -144,7 +144,10 @@ if integrity_check(axis_points):
     print(sum_y)
     print(sum_m)
     print(sol)
+    # axis_points[1].ya = sol["ya"]
     plot_shear_diagram(segments)
     plot_bending_diagram(segments)
+    print(sol[sp.Symbol('yA')])
+    print('cf')
 else:
     print("The problem is statically indeterminate")

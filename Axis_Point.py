@@ -15,8 +15,8 @@ class Axis_Point:
     #Distributed force, to be given to the segment
     distributed_force = None
     #The internal shear force and bending moment
-    ya = None
-    ma = None
+    ya = 0
+    ma = 0
 
     def __init__(self, name, x, support=None, concentrated_force=None, bending_moment=None, distributed_force=None):
         self.name = name
