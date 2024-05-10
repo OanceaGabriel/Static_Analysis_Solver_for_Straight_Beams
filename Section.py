@@ -39,7 +39,7 @@ class Section:
         self.center_of_mass = self.center_calculation()
 
     #Displays center of mass and area of the section
-    def display(self):
+    def display_section_properties(self):
         self.center_of_mass.display()
         print(self.area)
 
