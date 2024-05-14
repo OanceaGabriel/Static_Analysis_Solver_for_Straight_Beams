@@ -22,7 +22,7 @@ class Segment:
         x = sp.symbols('x')
         if point_1.distributed_force != 0 and point_2.distributed_force != 0:
             self.distributed_force = distributed_force
-            self.shear_function = self.distributed_force * x
+            self.shear_function = self.distributed_force * x + self.point_1.ya
         else:
             self.shear_function = sp.sympify(0*x + self.point_1.concentrated_force)
 
