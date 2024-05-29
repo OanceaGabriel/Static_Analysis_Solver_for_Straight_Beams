@@ -129,11 +129,6 @@ def plot_bending_diagram(list_of_segments):
     plt.show()
 
 
-def calculate_bending_moment_equation(force, distance):
-    x = sp.symbols('x')
-    return force * (distance + x)
-
-
 if integrity_check(axis_points):
     create_segments(axis_points)
     section.display_section_properties()

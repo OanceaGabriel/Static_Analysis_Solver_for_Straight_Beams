@@ -23,14 +23,14 @@ class Section:
         centroid_y = 0
         for i in range(len(self.points_obj) - 1):
             factor = self.points_obj[i].y * self.points_obj[i + 1].z - self.points_obj[i + 1].y * self.points_obj[i].z
-            centroid_x += (self.points_obj[i].y + self.points_obj[i + 1].y) * factor
-            centroid_y += (self.points_obj[i].z + self.points_obj[i + 1].z) * factor
+            centroid_x += (-1)*(self.points_obj[i].y + self.points_obj[i + 1].y) * factor
+            centroid_y += (-1)*(self.points_obj[i].z + self.points_obj[i + 1].z) * factor
         centroid_x /= (6 * self.area)
         centroid_y /= (6 * self.area)
         center_of_gravity = Section_Point(centroid_x, centroid_y)
         return center_of_gravity
 
-    def inertia_moment_y_calculation(self): # This algorithm uses Shoelace formula
+    def inertia_moment_y_calculation(self):  # This algorithm uses Shoelace formula
         inertia_moment_y = 0.0
         centroid_y = self.center_of_mass.y
         centroid_z = self.center_of_mass.z
@@ -48,7 +48,7 @@ class Section:
 
         return inertia_moment_y
 
-    def inertia_moment_z_calculation(self): # This algorithm uses Shoelace formula
+    def inertia_moment_z_calculation(self):  # This algorithm uses Shoelace formula
         inertia_moment_z = 0.0
         centroid_y = self.center_of_mass.y
         centroid_z = self.center_of_mass.z
@@ -64,7 +64,7 @@ class Section:
 
         return inertia_moment_z
 
-    def inertia_moment_zy_calculation(self): # This algorithm uses Shoelace formula
+    def inertia_moment_zy_calculation(self):  # This algorithm uses Shoelace formula
         inertia_moment_zy = 0.0
         centroid_y = self.center_of_mass.y
         centroid_z = self.center_of_mass.z
@@ -75,10 +75,31 @@ class Section:
                 (i + 1) % len(self.points_obj)].y - centroid_y
             product_z = y2 * z1 - y1 * z2
 
-            inertia_moment_zy += (z1*y2 + 2*z1*y1 + 2*z2*y2 + z2*y1) * product_z
+            inertia_moment_zy += (z1 * y2 + 2 * z1 * y1 + 2 * z2 * y2 + z2 * y1) * product_z
         inertia_moment_zy /= 24
 
         return inertia_moment_zy
+
+    def z_max(self):
+        max = 0
+        for section_point in self.points_obj:
+            if abs(max) < abs(section_point.z):
+                max = section_point.z
+        return max - self.center_of_mass.y
+
+    def y_max(self):
+        max = 0
+        for section_point in self.points_obj:
+            if abs(max) < abs(section_point.y):
+                max = section_point.y
+        return max - self.center_of_mass.z
+
+    def rigidity_module_Wy(self):
+        return self.inertia_moment_y_calculation() / self.z_max()
+
+    def rigidity_module_Wz(self):
+        return self.inertia_moment_z_calculation() / self.y_max()
+
 
     def __init__(self, points):
         self.points_obj = points
@@ -88,11 +109,11 @@ class Section:
         self.area = self.area_calculation()
         self.center_of_mass = self.center_calculation()
 
-    #Displays center of mass and area of the section
+    # Displays center of mass and area of the section
     def display_section_properties(self):
         self.center_of_mass.display()
         print(self.area)
-        print("Iy= ",self.inertia_moment_y_calculation())
+        print("Iy= ", self.inertia_moment_y_calculation())
         print("Iz= ", self.inertia_moment_z_calculation())
         print("Izy= ", self.inertia_moment_zy_calculation())
 
