@@ -5,13 +5,13 @@ from Axis_Point import Axis_Point
 
 
 class Segment:
-    point_1 = Axis_Point
-    point_2 = Axis_Point
-    length = None
-    distributed_force = 0
-    point_mid = None
-    shear_function = None
-    bending_function = None
+    __point_1 = Axis_Point
+    __point_2 = Axis_Point
+    __length = None
+    __distributed_force = 0
+    __point_mid = None
+    __shear_function = None
+    __bending_function = None
 
     def __init__(self, point_1, point_2, distributed_force=0):
         self.__point_1 = point_1
