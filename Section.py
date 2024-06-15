@@ -185,7 +185,7 @@ class Section:
         Y_vertical = max_x + shift_amount
 
         # Plotting the first-degree function (line) from points (Y1, Z1) and (Y2, Z2)
-        Z1 = 13
+        Z1 = max_y
         Z2 = 0
 
         # Adjusting the line to be shifted to the right of the polygon
@@ -199,17 +199,17 @@ class Section:
         axis.plot([Y1_shifted, Y2_shifted], [Z1, Z2], 'g-')  # blue line with dots
 
         # Add text for the first shifted point
-        axis.text(Y1_shifted, Z1, f'σ={Y1:.2f}', color='black', fontsize=11, ha='right', va='bottom')
+        axis.text(Y1_shifted, Z1, f'σ={-Y1*100:.2f}', color='black', fontsize=11, ha='right', va='bottom')
 
         # Add text for the second shifted point
-        axis.text(Y2_shifted, Z2, f'σ={Y2:.2f}', color='black', fontsize=11, ha='left', va='top')
+        axis.text(Y2_shifted, Z2, f'σ={Y2*100:.2f}', color='black', fontsize=11, ha='left', va='top')
 
         # Fill the area between the vertical line and the shifted lines
         axis.fill_betweenx([Z1,Z2], Y_vertical, [Y1_shifted,Y2_shifted], color='green', alpha=0.2)  # fill segment 1
 
         # Set the axis limits to include both the polygon and the lines
         axis.set_xlim(min_x - 1, max_x + shift_amount + shift_amount)
-        axis.set_ylim(min(min_y, Z2) - 1, max(max_y, Z1) + 1)
+        axis.set_ylim(min(min_y, Z2) - 1, max(max_y, Z1) + 2)
 
         # Axis labels
         axis.set_xlabel('Y')
