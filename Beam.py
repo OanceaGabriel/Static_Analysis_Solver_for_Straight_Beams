@@ -1,15 +1,15 @@
-from matplotlib import pyplot as plt
-import sympy as sp
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
 
-from Section_Point import Section_Point
-from Section import Section
-from Axis_Point import Axis_Point
-from Support import Support
-from Segment import Segment
+import sympy as sp
+from matplotlib import pyplot as plt
 from sympy import Eq, solve
+
+from Axis_Point import Axis_Point
 from BeamApp import BeamApp
+from Section import Section
+from Section_Point import Section_Point
+from Segment import Segment
+from Support import Support
 
 segments = []
 section_points = []
