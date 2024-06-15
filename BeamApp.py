@@ -134,7 +134,7 @@ class BeamApp:
                 plt.text(x, y + arrow_direction + 0.1, f"{force}N", ha='center')
 
         plt.title("Beam Points")
-        plt.xlabel("x")
+        plt.xlabel("Length of the beam [mm]")
         plt.ylabel("Beam")
         plt.ylim(-0.5, 0.5)
         plt.grid(False)
