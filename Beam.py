@@ -1,5 +1,7 @@
 from matplotlib import pyplot as plt
 import sympy as sp
+import tkinter as tk
+from tkinter import ttk, filedialog, messagebox
 
 from Section_Point import Section_Point
 from Section import Section
@@ -7,6 +9,7 @@ from Axis_Point import Axis_Point
 from Support import Support
 from Segment import Segment
 from sympy import Eq, solve
+from BeamApp import BeamApp
 
 segments = []
 section_points = []
@@ -14,7 +17,12 @@ axis_points = []
 # A list containing the objects which have an internal force
 internal_forces_obj = []
 
-with open("Problems/Exercise_01.txt", "r") as exercise:
+
+root = tk.Tk()
+app = BeamApp(root)
+root.mainloop()
+
+with open(app.file_path, "r") as exercise:
     exercise_line = exercise.readlines()
     points_raw = exercise_line[0].strip().split(",")
     for point in points_raw:

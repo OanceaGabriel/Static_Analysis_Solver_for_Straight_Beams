@@ -209,7 +209,7 @@ class Section:
 
         # Set the axis limits to include both the polygon and the lines
         axis.set_xlim(min_y - 1, max_y + shift_amount + shift_amount)
-        axis.set_ylim(min(min_z, Z2) - 1, max(max_z, Z1) + 1)
+        axis.set_ylim(min(min_z, Z2) - 1, max(max_z, Z1) + 2)
 
         # Axis labels
         axis.set_xlabel('Y')
