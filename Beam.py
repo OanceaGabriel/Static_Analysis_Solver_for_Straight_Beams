@@ -131,7 +131,6 @@ def plot_bending_diagram(list_of_segments):
 
 if integrity_check(axis_points):
     create_segments(axis_points)
-    section.plot_section()
     sum_y = compute_shear_forces_sum(axis_points, segments)
     sum_m = compute_moments_sum(axis_points, segments)
     sol = solve((sum_y, sum_m), [x.ya for x in internal_forces_obj] +
@@ -159,9 +158,6 @@ if integrity_check(axis_points):
                                                 x) + segment.point_1.bending_moments + previous_bending_moment
         previous_bending_moment = segment.bending_moment_point_2()
 
-    plot_shear_diagram(segments)
-    plot_bending_diagram(segments)
-
     maximum_bending_moment = 0
     for segment in segments:
         if abs(maximum_bending_moment) < abs(segment.maximum_bending_moment()):
@@ -169,7 +165,12 @@ if integrity_check(axis_points):
     print("Maximum bending moment: ",maximum_bending_moment)
     section.display_section_properties(maximum_moment= abs(maximum_bending_moment))
 
+    y1 = float(section.bending_stress_in_lower_fiber(maximum_bending_moment)) / 100
+    y2 = float(section.bending_stress_in_higher_fiber(maximum_bending_moment)) /100
 
+    section.plot_section(y1,y2)
+    plot_shear_diagram(segments)
+    plot_bending_diagram(segments)
 
     # for segment in segments:
     #     print("segment:", segment.point_1.name, segment.point_2.name)

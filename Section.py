@@ -165,7 +165,7 @@ class Section:
         print("Bending stress in higher fiber (z = ", self.find_higher_fiber(), ")= ",
               self.bending_stress_in_higher_fiber(maximum_moment))
 
-    def plot_section(self):
+    def plot_section(self, Y1,Y2):
         fig, axis = plt.subplots()
         axis.set_aspect('equal', 'box')
 
@@ -173,19 +173,54 @@ class Section:
         poly_patch = Polygon(self.point_list, closed=True, edgecolor='r', linewidth=2)
         axis.add_patch(poly_patch)
 
-        # Sets the axis limits
+        # Sets the axis limits for the polygon
         min_x = min(p[0] for p in self.point_list)
         max_x = max(p[0] for p in self.point_list)
         min_y = min(p[1] for p in self.point_list)
         max_y = max(p[1] for p in self.point_list)
-        axis.set_xlim(min_x - 1, max_x + 1)
-        axis.set_ylim(min_y - 1, max_y + 1)
+
+        # Calculate the shift amount
+        shift_amount = 10  # shift amount of 5
+
+        # Determine the Y position for the vertical line
+        Y_vertical = max_x + shift_amount
+
+        # Plotting the first-degree function (line) from points (Y1, Z1) and (Y2, Z2)
+        Z1 = 13
+        Z2 = 0
+
+        # Adjusting the line to be shifted to the right of the polygon
+        Y1_shifted = Y1 + Y_vertical
+        Y2_shifted = Y_vertical - Y2
+
+        # Plot the vertical line at Y = Y_vertical
+        axis.plot([Y_vertical, Y_vertical], [min(min_y, Z2), max(max_y, Z1)], 'g-', linewidth=2)  # green dashed line
+
+        # Plotting the shifted lines correctly
+        axis.plot([Y1_shifted, Y2_shifted], [Z1, Z2], 'g-')  # blue line with dots
+
+        # Add text for the first shifted point
+        axis.text(Y1_shifted, Z1, f'σ={Y1:.2f}', color='black', fontsize=11, ha='right', va='bottom')
+
+        # Add text for the second shifted point
+        axis.text(Y2_shifted, Z2, f'σ={Y2:.2f}', color='black', fontsize=11, ha='left', va='top')
+
+        # Fill the area between the vertical line and the shifted lines
+        axis.fill_betweenx([Z1,Z2], Y_vertical, [Y1_shifted,Y2_shifted], color='green', alpha=0.2)  # fill segment 1
+
+        # Set the axis limits to include both the polygon and the lines
+        axis.set_xlim(min_x - 1, max_x + shift_amount + shift_amount)
+        axis.set_ylim(min(min_y, Z2) - 1, max(max_y, Z1) + 1)
 
         # Axis labels
         axis.set_xlabel('Y')
         axis.set_ylabel('Z')
 
-        # Shows the plot
+        # Show grid, title, and the plot
         plt.grid(True)
-        plt.title("Section")
+        plt.title("Section with Line and Filled Areas")
         plt.show()
+
+
+
+
