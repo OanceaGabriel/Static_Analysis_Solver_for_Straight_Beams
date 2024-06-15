@@ -14,4 +14,3 @@ class Section_Point:
 
     def get_z(self):
         return self.__z
-

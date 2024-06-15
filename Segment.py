@@ -1,6 +1,6 @@
 # This class is used for easier manipulation of the beam's segments
-from sympy import integrate
 import sympy as sp
+
 from Axis_Point import Axis_Point
 
 

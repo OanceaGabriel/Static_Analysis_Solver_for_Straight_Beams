@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import matplotlib.pyplot as plt
-from matplotlib.patches import Arc, FancyArrow
+from matplotlib.patches import Arc, FancyArrow, Rectangle
 
 
 class BeamApp:
@@ -66,9 +66,35 @@ class BeamApp:
         labels = [point['name'] for point in self.points]
         forces = [point['force'] for point in self.points]
         moments = [point['moment'] for point in self.points]
+        dist_forces = [point['dist_force'] for point in self.points]
 
         plt.figure()
         plt.plot(x_values, y_values, marker='o', linestyle='-', color='black', linewidth=5)  # Added line-width=5 here
+
+        arrow_length = 0.1
+        for i, (x, y, dist_force) in enumerate(zip(x_values, y_values, dist_forces)):
+            if dist_force != 0:
+                arrow_length = 0.1
+                arrow_color = 'skyblue'
+                arrow_y = 0.1 if dist_force > 0 else -0.1
+                arrow_direction = -1 if dist_force > 0 else 1
+                arrow = FancyArrow(x, arrow_y, 0, arrow_direction * (arrow_length - 0.06), width=0.01,
+                                   head_width=0.1, head_length=0.05, color=arrow_color)
+                plt.gca().add_patch(arrow)
+
+        for i in range(len(self.points) - 1):
+            x1, x2 = x_values[i], x_values[i + 1]
+            dist_force1, dist_force2 = dist_forces[i], dist_forces[i + 1]
+
+            # Draw a rectangle between two consecutive points if both have non-zero distributed forces
+            if dist_force1 != 0 and dist_force2 != 0:
+                width = abs(x2 - x1)
+                height = arrow_length  # Adjust the height of the rectangle as needed
+                rect_x = min(x1, x2)
+                rect_y = 0 if dist_force1 > 0 else -height  # Position below the beam
+                color = 'skyblue'  # Color of the rectangle
+                rect = Rectangle((rect_x, rect_y), width, height, color=color, alpha=0.6, linewidth=2)
+                plt.gca().add_patch(rect)
 
         for x, y, moment, label in zip(x_values, y_values, moments, labels):
             if moment != 0:

@@ -13,9 +13,9 @@ class Axis_Point:
     __bending_moments = None
     # Support object
     __support = None
-    #Distributed force, to be given to the segment
+    # Distributed force, to be given to the segment
     __distributed_force = None
-    #The internal shear force and bending moment
+    # The internal shear force and bending moment
     __ya = 0
     __ma = 0
 
@@ -66,4 +66,3 @@ class Axis_Point:
 
     def get_distributed_force(self):
         return self.__distributed_force
-

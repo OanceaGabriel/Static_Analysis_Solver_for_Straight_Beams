@@ -4,8 +4,6 @@ import sympy as sp
 from matplotlib import pyplot as plt
 from sympy import Eq, solve
 
-from Section_Point import Section_Point
-from Section import Section
 from Axis_Point import Axis_Point
 from BeamApp import BeamApp
 from Section import Section
@@ -18,7 +16,6 @@ section_points = []
 axis_points = []
 # A list containing the objects which have an internal force
 internal_forces_obj = []
-
 
 root = tk.Tk()
 app = BeamApp(root)
@@ -89,11 +86,13 @@ def compute_moments_sum(points, segments_m):
         if point_x.get_support().get_name() != "Free":
             left_hand_side = point_x.get_ya() * (internal_forces[0].get_x() - point_x.get_x()) + point_x.get_ma()
         else:
-            moments_sum += point_x.get_concentrated_force() * (internal_forces[0].get_x() - point_x.get_x()) + point_x.get_bending_moments()
+            moments_sum += point_x.get_concentrated_force() * (
+                        internal_forces[0].get_x() - point_x.get_x()) + point_x.get_bending_moments()
     for segment in segments_m:
         if segment.get_distributed_force() != 0:
-            moments_sum += segment.get_distributed_force() * segment.get_length() * (internal_forces[0].get_x() - segment.get_point_2().get_x()
-                                                                                 + (segment.get_length() / 2))
+            moments_sum += segment.get_distributed_force() * segment.get_length() * (
+                        internal_forces[0].get_x() - segment.get_point_2().get_x()
+                        + (segment.get_length() / 2))
     return Eq(left_hand_side, -1 * moments_sum)
 
 
@@ -167,13 +166,13 @@ if integrity_check(axis_points):
     for segment in segments:
         if abs(maximum_bending_moment) < abs(segment.maximum_bending_moment()):
             maximum_bending_moment = segment.maximum_bending_moment()
-    print("Maximum bending moment: ",maximum_bending_moment)
-    section.display_section_properties(maximum_moment= abs(maximum_bending_moment))
+    print("Maximum bending moment: ", maximum_bending_moment)
+    section.display_section_properties(maximum_moment=abs(maximum_bending_moment))
 
     y1 = float(section.bending_stress_in_lower_fiber(maximum_bending_moment)) / 100
-    y2 = float(section.bending_stress_in_higher_fiber(maximum_bending_moment)) /100
+    y2 = float(section.bending_stress_in_higher_fiber(maximum_bending_moment)) / 100
 
-    section.plot_section(y1,y2)
+    section.plot_section(y1, y2)
     plot_shear_diagram(segments)
     plot_bending_diagram(segments)
 
