@@ -1,6 +1,6 @@
 class Support:
-    name = None
-    dof = None
+    __name = None
+    __dof = None
     #DOF represents the blocked degrees of freedom, examples bellow:
     #Support types are:
     #Fixed support(DOF = 2)/Incastrare
@@ -9,12 +9,18 @@ class Support:
     #No support(DOF = 0)
 
     def __init__(self, support):
-        self.name = support
+        self.__name = support
         if support == "Fixed":
-            self.dof = 2
+            self.__dof = 2
         elif support == "Pinned":
-            self.dof = 1
+            self.__dof = 1
         elif support == "Roller":
-            self.dof = 1
+            self.__dof = 1
         else:
-            self.dof = 0
+            self.__dof = 0
+
+    def get_name(self):
+        return self.__name
+
+    def get_dof(self):
+        return self.__dof

@@ -12,7 +12,7 @@ class Section:
     def area_calculation(self):
         area = 0
         for i in range(len(self.__points_obj) - 1):
-            area += self.__points_obj[i].y * self.__points_obj[i + 1].z - self.__points_obj[i + 1].y * self.__points_obj[i].z
+            area += self.__points_obj[i].get_y() * self.__points_obj[i + 1].get_z() - self.__points_obj[i + 1].get_y() * self.__points_obj[i].get_z()
         self.__area = abs(area) / 2
         return abs(area) / 2
 
@@ -21,9 +21,9 @@ class Section:
         centroid_x = 0
         centroid_y = 0
         for i in range(len(self.__points_obj) - 1):
-            factor = self.__points_obj[i].y * self.__points_obj[i + 1].z - self.__points_obj[i + 1].y * self.__points_obj[i].z
-            centroid_x += (-1) * (self.__points_obj[i].y + self.__points_obj[i + 1].y) * factor
-            centroid_y += (-1) * (self.__points_obj[i].z + self.__points_obj[i + 1].z) * factor
+            factor = self.__points_obj[i].get_y() * self.__points_obj[i + 1].get_z() - self.__points_obj[i + 1].get_y() * self.__points_obj[i].get_z()
+            centroid_x += (-1) * (self.__points_obj[i].get_y() + self.__points_obj[i + 1].get_y()) * factor
+            centroid_y += (-1) * (self.__points_obj[i].get_z() + self.__points_obj[i + 1].get_z()) * factor
         centroid_x /= (6 * self.__area)
         centroid_y /= (6 * self.__area)
         center_of_gravity = Section_Point(centroid_x, centroid_y)
@@ -31,13 +31,13 @@ class Section:
 
     def inertia_moment_y_calculation(self):  # This algorithm uses Shoelace formula
         inertia_moment_y = 0.0
-        centroid_y = self.__center_of_mass.y
-        centroid_z = self.__center_of_mass.z
+        centroid_y = self.__center_of_mass.get_y()
+        centroid_z = self.__center_of_mass.get_z()
 
         for i in range(len(self.__points_obj)):
-            z1, y1 = self.__points_obj[i].z - centroid_z, self.__points_obj[i].y - centroid_y
-            z2, y2 = self.__points_obj[(i + 1) % len(self.__points_obj)].z - centroid_z, self.__points_obj[
-                (i + 1) % len(self.__points_obj)].y - centroid_y
+            z1, y1 = self.__points_obj[i].get_z() - centroid_z, self.__points_obj[i].get_y() - centroid_y
+            z2, y2 = self.__points_obj[(i + 1) % len(self.__points_obj)].get_z() - centroid_z, self.__points_obj[
+                (i + 1) % len(self.__points_obj)].get_y() - centroid_y
 
             product_y = z1 * y2 - z2 * y1
 
@@ -49,13 +49,13 @@ class Section:
 
     def inertia_moment_z_calculation(self):  # This algorithm uses Shoelace formula
         inertia_moment_z = 0.0
-        centroid_y = self.__center_of_mass.y
-        centroid_z = self.__center_of_mass.z
+        centroid_y = self.__center_of_mass.get_y()
+        centroid_z = self.__center_of_mass.get_z()
 
         for i in range(len(self.__points_obj)):
-            z1, y1 = self.__points_obj[i].z - centroid_z, self.__points_obj[i].y - centroid_y
-            z2, y2 = self.__points_obj[(i + 1) % len(self.__points_obj)].z - centroid_z, self.__points_obj[
-                (i + 1) % len(self.__points_obj)].y - centroid_y
+            z1, y1 = self.__points_obj[i].get_z() - centroid_z, self.__points_obj[i].get_y() - centroid_y
+            z2, y2 = self.__points_obj[(i + 1) % len(self.__points_obj)].get_z() - centroid_z, self.__points_obj[
+                (i + 1) % len(self.__points_obj)].get_y() - centroid_y
             product_z = y2 * z1 - y1 * z2
 
             inertia_moment_z += (y1 ** 2 + y1 * y2 + y2 ** 2) * product_z
@@ -65,13 +65,13 @@ class Section:
 
     def inertia_moment_zy_calculation(self):  # This algorithm uses Shoelace formula
         inertia_moment_zy = 0.0
-        centroid_y = self.__center_of_mass.y
-        centroid_z = self.__center_of_mass.z
+        centroid_y = self.__center_of_mass.get_y()
+        centroid_z = self.__center_of_mass.get_z()
 
         for i in range(len(self.__points_obj)):
-            z1, y1 = self.__points_obj[i].z - centroid_z, self.__points_obj[i].y - centroid_y
-            z2, y2 = self.__points_obj[(i + 1) % len(self.__points_obj)].z - centroid_z, self.__points_obj[
-                (i + 1) % len(self.__points_obj)].y - centroid_y
+            z1, y1 = self.__points_obj[i].get_z() - centroid_z, self.__points_obj[i].get_y() - centroid_y
+            z2, y2 = self.__points_obj[(i + 1) % len(self.__points_obj)].get_z() - centroid_z, self.__points_obj[
+                (i + 1) % len(self.__points_obj)].get_y() - centroid_y
             product_z = y2 * z1 - y1 * z2
 
             inertia_moment_zy += (z1 * y2 + 2 * z1 * y1 + 2 * z2 * y2 + z2 * y1) * product_z
@@ -105,33 +105,33 @@ class Section:
     def find_lower_fiber(self):
         lower_fiber = 1000000
         for point in self.__points_obj:
-            if point.z < lower_fiber:
-                lower_fiber = point.z
+            if point.get_z() < lower_fiber:
+                lower_fiber = point.get_z()
         return lower_fiber
 
     def find_higher_fiber(self):
         higher_fiber = -1000000
         for point in self.__points_obj:
-            if point.z > higher_fiber:
-                higher_fiber = point.z
+            if point.get_z() > higher_fiber:
+                higher_fiber = point.get_z()
         return higher_fiber
 
     def find_lefter_fiber(self):
         find_lefter_fiber = -1000000
         for point in self.__points_obj:
-            if point.y < find_lefter_fiber:
-                find_lefter_fiber = point.y
+            if point.__y < find_lefter_fiber:
+                find_lefter_fiber = point.__y
         return find_lefter_fiber
 
     def find_righter_fiber(self):
         find_righter_fiber = -1000000
         for point in self.__points_obj:
-            if point.y > find_righter_fiber:
-                find_righter_fiber = point.y
+            if point.__y > find_righter_fiber:
+                find_righter_fiber = point.__y
         return find_righter_fiber
 
     def distance_from_centroid_to_fiber(self, z_coordinate):
-        return abs(self.__center_of_mass.z - z_coordinate)
+        return abs(self.__center_of_mass.get_z() - z_coordinate)
 
     def bending_stress_in_lower_fiber(self, maximum_moment):
         return (maximum_moment * self.distance_from_centroid_to_fiber(
@@ -144,7 +144,7 @@ class Section:
     def __init__(self, points):
         self.__points_obj = points
         for point in self.__points_obj:
-            point_tupple = (point.y, point.z)
+            point_tupple = (point.get_y(), point.get_z())
             self.__point_list.append(point_tupple)
         self.__area = self.area_calculation()
         self.__center_of_mass = self.center_calculation()
@@ -173,16 +173,16 @@ class Section:
         axis.add_patch(poly_patch)
 
         # Sets the axis limits for the polygon
-        min_y = min(p[0] for p in self.__point_list)
-        max_y = max(p[0] for p in self.__point_list)
-        min_z = min(p[1] for p in self.__point_list)
-        max_z = max(p[1] for p in self.__point_list)
+        min_x = min(p[0] for p in self.__point_list)
+        max_x = max(p[0] for p in self.__point_list)
+        min_y = min(p[1] for p in self.__point_list)
+        max_y = max(p[1] for p in self.__point_list)
 
         # Calculate the shift amount
         shift_amount = 10  # shift amount of 5
 
         # Determine the Y position for the vertical line
-        Y_vertical = max_y + shift_amount
+        Y_vertical = max_x + shift_amount
 
         # Plotting the first-degree function (line) from points (Y1, Z1) and (Y2, Z2)
         Z1 = 13
@@ -193,23 +193,23 @@ class Section:
         Y2_shifted = Y_vertical - Y2
 
         # Plot the vertical line at Y = Y_vertical
-        axis.plot([Y_vertical, Y_vertical], [min(min_z, Z2), max(max_z, Z1)], 'g-', linewidth=2)  # green dashed line
+        axis.plot([Y_vertical, Y_vertical], [min(min_y, Z2), max(max_y, Z1)], 'g-', linewidth=2)  # green dashed line
 
         # Plotting the shifted lines correctly
         axis.plot([Y1_shifted, Y2_shifted], [Z1, Z2], 'g-')  # blue line with dots
 
         # Add text for the first shifted point
-        axis.text(Y1_shifted, Z1, f'σ={-Y1*100:.2f}', color='black', fontsize=11, ha='right', va='bottom')
+        axis.text(Y1_shifted, Z1, f'σ={Y1:.2f}', color='black', fontsize=11, ha='right', va='bottom')
 
         # Add text for the second shifted point
-        axis.text(Y2_shifted, Z2, f'σ={-Y2*100:.2f}', color='black', fontsize=11, ha='left', va='top')
+        axis.text(Y2_shifted, Z2, f'σ={Y2:.2f}', color='black', fontsize=11, ha='left', va='top')
 
         # Fill the area between the vertical line and the shifted lines
         axis.fill_betweenx([Z1,Z2], Y_vertical, [Y1_shifted,Y2_shifted], color='green', alpha=0.2)  # fill segment 1
 
         # Set the axis limits to include both the polygon and the lines
-        axis.set_xlim(min_y - 1, max_y + shift_amount + shift_amount)
-        axis.set_ylim(min(min_z, Z2) - 1, max(max_z, Z1) + 2)
+        axis.set_xlim(min_x - 1, max_x + shift_amount + shift_amount)
+        axis.set_ylim(min(min_y, Z2) - 1, max(max_y, Z1) + 1)
 
         # Axis labels
         axis.set_xlabel('Y')
@@ -219,3 +219,8 @@ class Section:
         plt.grid(True)
         plt.title("Section with Line and Filled Areas")
         plt.show()
+
+
+
+
+
