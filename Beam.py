@@ -47,11 +47,12 @@ def create_segments(points):
     previous_bending_moment = 0
     for i in range(len(points) - 1):
         segment = Segment(points[i], points[i + 1], points[i].distributed_force)
-        segment.shear_function = segment.shear_function + previous_shear_force
+        segment.shear_function= segment.shear_function + previous_shear_force
+        # segment.shear_function = segment.shear_function + previous_shear_force
         previous_shear_force = segment.shear_function_point_2()
 
         x = sp.symbols('x')
-        segment.bending_function = sp.integrate(segment.shear_function,
+        segment.bending_function= sp.integrate(segment.shear_function,
                                                 x) + segment.point_1.bending_moments + previous_bending_moment
         previous_bending_moment = segment.bending_moment_point_2()
         segments.append(segment)
@@ -151,10 +152,10 @@ if integrity_check(axis_points):
     for segment in segments:
         if segment.point_1.name.isalpha():
             reaction += segment.point_1.ya
-        segment.shear_function += reaction
+        segment.shear_function= segment.shear_function + reaction
 
         x = sp.symbols('x')
-        segment.bending_function = sp.integrate(segment.shear_function,
+        segment.bending_function= sp.integrate(segment.shear_function,
                                                 x) + segment.point_1.bending_moments + previous_bending_moment
         previous_bending_moment = segment.bending_moment_point_2()
 
@@ -166,7 +167,7 @@ if integrity_check(axis_points):
     section.display_section_properties(maximum_moment= abs(maximum_bending_moment))
 
     y1 = float(section.bending_stress_in_lower_fiber(maximum_bending_moment)) / 100
-    y2 = float(section.bending_stress_in_higher_fiber(maximum_bending_moment)) /100
+    y2 = float(section.bending_stress_in_higher_fiber(maximum_bending_moment)) / 100
 
     section.plot_section(y1,y2)
     plot_shear_diagram(segments)
