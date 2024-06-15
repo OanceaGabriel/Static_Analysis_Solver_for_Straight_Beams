@@ -168,15 +168,5 @@ if integrity_check(axis_points):
     plot_shear_diagram(segments)
     plot_bending_diagram(segments)
 
-    # for segment in segments:
-    #     print("segment:", segment.point_1.name, segment.point_2.name)
-    #     print("Distributed force on segment: ", segment.distributed_force)
-    #     print("Shear function: ", segment.shear_function)
-    #     print("Shear force in Point 1:", segment.shear_function_point_1())
-    #     print("Shear force in Point 2: ", segment.shear_function_point_2(), "\n")
-    #     print("Bending function: ", segment.bending_function)
-    #     print("Bending moment in Point 1:", segment.bending_moment_point_1())
-    #     print("Bending moment in Point 2: ", segment.bending_moment_point_2(), "\n")
-
 else:
     print("The problem is statically indeterminate")
