@@ -2,6 +2,7 @@ from matplotlib import pyplot as plt
 from matplotlib.patches import Polygon
 from Section_Point import Section_Point
 
+
 class Section:
     __points_obj = []
     __point_list = []
@@ -12,7 +13,8 @@ class Section:
     def area_calculation(self):
         area = 0
         for i in range(len(self.__points_obj) - 1):
-            area += self.__points_obj[i].get_y() * self.__points_obj[i + 1].get_z() - self.__points_obj[i + 1].get_y() * self.__points_obj[i].get_z()
+            area += self.__points_obj[i].get_y() * self.__points_obj[i + 1].get_z() - self.__points_obj[i + 1].get_y() * \
+                    self.__points_obj[i].get_z()
         self.__area = abs(area) / 2
         return abs(area) / 2
 
@@ -21,7 +23,8 @@ class Section:
         centroid_x = 0
         centroid_y = 0
         for i in range(len(self.__points_obj) - 1):
-            factor = self.__points_obj[i].get_y() * self.__points_obj[i + 1].get_z() - self.__points_obj[i + 1].get_y() * self.__points_obj[i].get_z()
+            factor = self.__points_obj[i].get_y() * self.__points_obj[i + 1].get_z() - self.__points_obj[
+                i + 1].get_y() * self.__points_obj[i].get_z()
             centroid_x += (-1) * (self.__points_obj[i].get_y() + self.__points_obj[i + 1].get_y()) * factor
             centroid_y += (-1) * (self.__points_obj[i].get_z() + self.__points_obj[i + 1].get_z()) * factor
         centroid_x /= (6 * self.__area)
@@ -80,14 +83,16 @@ class Section:
         return inertia_moment_zy
 
     def z_max(self):
-        if abs(self.distance_from_centroid_to_fiber(self.find_lower_fiber())) < abs(self.distance_from_centroid_to_fiber(self.find_higher_fiber())):
+        if abs(self.distance_from_centroid_to_fiber(self.find_lower_fiber())) < abs(
+                self.distance_from_centroid_to_fiber(self.find_higher_fiber())):
             maximum = self.distance_from_centroid_to_fiber(self.find_higher_fiber())
         else:
             maximum = self.distance_from_centroid_to_fiber(self.find_lower_fiber())
         return maximum
 
     def y_max(self):
-        if abs(self.distance_from_centroid_to_fiber(self.find_righter_fiber())) < abs(self.distance_from_centroid_to_fiber(self.find_lefter_fiber())):
+        if abs(self.distance_from_centroid_to_fiber(self.find_righter_fiber())) < abs(
+                self.distance_from_centroid_to_fiber(self.find_lefter_fiber())):
             maximum = self.distance_from_centroid_to_fiber(self.find_righter_fiber())
         else:
             maximum = self.distance_from_centroid_to_fiber(self.find_lefter_fiber())
@@ -164,7 +169,7 @@ class Section:
         print("Bending stress in higher fiber (z = ", self.find_higher_fiber(), ")= ",
               self.bending_stress_in_higher_fiber(maximum_moment))
 
-    def plot_section(self, Y1,Y2):
+    def plot_section(self, Y1, Y2):
         fig, axis = plt.subplots()
         axis.set_aspect('equal', 'box')
 
@@ -179,7 +184,7 @@ class Section:
         max_y = max(p[1] for p in self.__point_list)
 
         # Calculate the shift amount
-        shift_amount = 10  # shift amount of 5
+        shift_amount = 11  # shift amount of 11
 
         # Determine the Y position for the vertical line
         Y_vertical = max_x + shift_amount
@@ -199,13 +204,13 @@ class Section:
         axis.plot([Y1_shifted, Y2_shifted], [Z1, Z2], 'g-')  # blue line with dots
 
         # Add text for the first shifted point
-        axis.text(Y1_shifted, Z1, f'σ={-Y1*100:.2f}', color='black', fontsize=11, ha='right', va='bottom')
+        axis.text(Y1_shifted, Z1, f'σ={-Y1 * 100:.2f}', color='black', fontsize=11, ha='right', va='bottom')
 
         # Add text for the second shifted point
-        axis.text(Y2_shifted, Z2, f'σ={Y2*100:.2f}', color='black', fontsize=11, ha='left', va='top')
+        axis.text(Y2_shifted, Z2, f'σ={Y2 * 100:.2f}', color='black', fontsize=11, ha='left', va='top')
 
         # Fill the area between the vertical line and the shifted lines
-        axis.fill_betweenx([Z1,Z2], Y_vertical, [Y1_shifted,Y2_shifted], color='green', alpha=0.2)  # fill segment 1
+        axis.fill_betweenx([Z1, Z2], Y_vertical, [Y1_shifted, Y2_shifted], color='green', alpha=0.2)  # fill segment 1
 
         # Set the axis limits to include both the polygon and the lines
         axis.set_xlim(min_x - 1, max_x + shift_amount + shift_amount)
@@ -219,8 +224,3 @@ class Section:
         plt.grid(True)
         plt.title("Section with Line and Filled Areas")
         plt.show()
-
-
-
-
-
