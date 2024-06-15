@@ -1,3 +1,4 @@
+import sympy as sp
 from sympy import symbols
 
 
@@ -34,3 +35,8 @@ class Axis_Point:
 
     def degrees_of_freedom(self):
         return self.support.dof
+
+    def set_ya(self, sol):
+        if self.name.isalpha():
+            self.ya = sol[sp.Symbol("y"+self.name)]
+

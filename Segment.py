@@ -12,10 +12,12 @@ class Segment:
     point_mid = None
     shear_function = None
     bending_function = None
+    name = None
 
     def __init__(self, point_1, point_2, distributed_force=0):
         self.point_1 = point_1
         self.point_2 = point_2
+        self.name = point_1.name + point_2.name
         self.length = self.point_2.x - self.point_1.x
         self.point_mid = self.point_1.x + self.length / 2
 
@@ -48,3 +50,10 @@ class Segment:
         x_value = self.length
         x = sp.symbols('x')
         return self.bending_function.subs(x, x_value)
+
+    def maximum_bending_moment(self):
+        if abs(self.bending_moment_point_1()) > abs(self.bending_moment_point_2()):
+            mbm = self.bending_moment_point_1()
+        else:
+            mbm = self.bending_moment_point_2()
+        return mbm

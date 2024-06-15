@@ -54,7 +54,6 @@ def create_segments(points):
         segment.bending_function = sp.integrate(segment.shear_function,
                                                 x) + segment.point_1.bending_moments + previous_bending_moment
         previous_bending_moment = segment.bending_moment_point_2()
-
         segments.append(segment)
 
 
@@ -81,11 +80,11 @@ def compute_moments_sum(points, segments_m):
         if point_x.support.name != "Free":
             left_hand_side = point_x.ya * (internal_forces[0].x - point_x.x) + point_x.ma
         else:
-            moments_sum += point_x.concentrated_force * (internal_forces[0].x - point_x.x)
+            moments_sum += point_x.concentrated_force * (internal_forces[0].x - point_x.x) + point_x.bending_moments
     for segment in segments_m:
         if segment.distributed_force != 0:
             moments_sum += segment.distributed_force * segment.length * (internal_forces[0].x - segment.point_2.x
-                                                                         - (segment.length / 2))
+                                                                         + (segment.length / 2))
     return Eq(left_hand_side, -1 * moments_sum)
 
 
@@ -94,13 +93,15 @@ def plot_shear_diagram(list_of_segments):
     y_values = []
     for segment in list_of_segments:
         x_values.append(segment.point_1.x)
-        y_values.append(segment.shear_function_point_1())
+        y_values.append(float(segment.shear_function_point_1()))
         x_values.append(segment.point_2.x)
-        y_values.append(segment.shear_function_point_2())
+        y_values.append(float(segment.shear_function_point_2()))
 
-    x_values.append(list_of_segments[len(list_of_segments) - 1].point_2.x)
-    y_values.append(0)
+    # Plot the points using the lists
     plt.plot(x_values, y_values, 'g-')
+
+    # Use fill_between to fill the area between the function and the x-axis
+    plt.fill_between(x_values, y_values, color='skyblue', alpha=0.4)
 
     plt.title("Shear forces diagram")
     plt.xlabel("Length of the beam [mm]")
@@ -114,11 +115,12 @@ def plot_bending_diagram(list_of_segments):
     y_values = []
     for segment in list_of_segments:
         x_values.append(segment.point_1.x)
-        y_values.append(segment.bending_moment_point_1())
+        y_values.append(float(segment.bending_moment_point_1()))
         x_values.append(segment.point_2.x)
-        y_values.append(segment.bending_moment_point_2())
+        y_values.append(float(segment.bending_moment_point_2()))
 
     plt.plot(x_values, y_values, 'r-')
+    plt.fill_between(x_values, y_values, color='red', alpha=0.3)
 
     plt.title("Bending moments diagram")
     plt.xlabel("Length of the beam [mm]")
@@ -127,16 +129,8 @@ def plot_bending_diagram(list_of_segments):
     plt.show()
 
 
-def calculate_bending_moment_equation(force, distance):
-    x = sp.symbols('x')
-    return force * (distance + x)
-
-
 if integrity_check(axis_points):
     create_segments(axis_points)
-    section.display_section_properties()
-    # section.display()
-    section.plot_section()
     sum_y = compute_shear_forces_sum(axis_points, segments)
     sum_m = compute_moments_sum(axis_points, segments)
     sol = solve((sum_y, sum_m), [x.ya for x in internal_forces_obj] +
@@ -146,10 +140,11 @@ if integrity_check(axis_points):
     print(sol)
 
     for point in axis_points:
-        if point.name == "A":
-            point.ya = sol[sp.Symbol("yA")]
-        elif point.name == "B":
-            point.ya = sol[sp.Symbol("yB")]
+        point.set_ya(sol)
+        # if point.name == "A":
+        #     point.ya = sol[sp.Symbol("yA")]
+        # elif point.name == "B":
+        #     point.ya = sol[sp.Symbol("yB")]
 
     reaction = 0
     previous_bending_moment = 0
@@ -163,20 +158,29 @@ if integrity_check(axis_points):
                                                 x) + segment.point_1.bending_moments + previous_bending_moment
         previous_bending_moment = segment.bending_moment_point_2()
 
+    maximum_bending_moment = 0
+    for segment in segments:
+        if abs(maximum_bending_moment) < abs(segment.maximum_bending_moment()):
+            maximum_bending_moment = segment.maximum_bending_moment()
+    print("Maximum bending moment: ",maximum_bending_moment)
+    section.display_section_properties(maximum_moment= abs(maximum_bending_moment))
+
+    y1 = float(section.bending_stress_in_lower_fiber(maximum_bending_moment)) / 100
+    y2 = float(section.bending_stress_in_higher_fiber(maximum_bending_moment)) /100
+
+    section.plot_section(y1,y2)
     plot_shear_diagram(segments)
     plot_bending_diagram(segments)
 
-    for segment in segments:
-        print("segment:", segment.point_1.name, segment.point_2.name)
-        print("Distributed force on segment: ", segment.distributed_force)
-        print("Shear function: ", segment.shear_function)
-        print("Shear force in Point 1:", segment.shear_function_point_1())
-        print("Shear force in Point 2: ", segment.shear_function_point_2(), "\n")
-        print("Bending function: ", segment.bending_function)
-        print("Bending moment in Point 1:", segment.bending_moment_point_1())
-        print("Bending moment in Point 2: ", segment.bending_moment_point_2(), "\n")
+    # for segment in segments:
+    #     print("segment:", segment.point_1.name, segment.point_2.name)
+    #     print("Distributed force on segment: ", segment.distributed_force)
+    #     print("Shear function: ", segment.shear_function)
+    #     print("Shear force in Point 1:", segment.shear_function_point_1())
+    #     print("Shear force in Point 2: ", segment.shear_function_point_2(), "\n")
+    #     print("Bending function: ", segment.bending_function)
+    #     print("Bending moment in Point 1:", segment.bending_moment_point_1())
+    #     print("Bending moment in Point 2: ", segment.bending_moment_point_2(), "\n")
 
-    print(sol[sp.Symbol('yA')])
-    print('cf')
 else:
     print("The problem is statically indeterminate")
