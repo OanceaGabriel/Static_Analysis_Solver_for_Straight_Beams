@@ -9,33 +9,42 @@ class BeamApp:
         self.root = root
         self.root.title("Beam Points Drawer")
 
+        # List to store points loaded from the file
         self.points = []
         self.file_path = None  # New variable to store the file path
 
+        # Main frame for the GUI components with padding
         self.main_frame = ttk.Frame(self.root, padding="10")
         self.main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
+        # Button to load points from a file
         self.load_button = ttk.Button(self.main_frame, text="Load Points from File", command=self.load_points)
         self.load_button.grid(row=0, column=0, columnspan=2, pady=5)
 
+        # Button to draw the beam based on loaded points
         self.draw_button = ttk.Button(self.main_frame, text="Draw Beam", command=self.draw_beam)
         self.draw_button.grid(row=1, column=0, columnspan=2, pady=5)
 
+        # Listbox to display the loaded points
         self.points_listbox = tk.Listbox(self.main_frame, height=10, width=70)
         self.points_listbox.grid(row=2, column=0, columnspan=2, pady=10)
 
+        # Button to clear the loaded points
         self.clear_button = ttk.Button(self.main_frame, text="Clear Points", command=self.clear_points)
         self.clear_button.grid(row=3, column=0, columnspan=2, pady=5)
 
+        # Button to proceed to the next step, initially disabled
         self.next_step_button = ttk.Button(self.main_frame, text="Next Step", command=self.next_step)
         self.next_step_button.grid(row=4, column=0, columnspan=2, pady=5)
         self.next_step_button.config(state=tk.DISABLED)  # Initially disabled
 
     def load_points(self):
+        # Open file dialog to select a file
         self.file_path = filedialog.askopenfilename(filetypes=[("Text files", "*.txt"), ("All files", "*.*")])
         if not self.file_path:
             return
         try:
+            # Read the file and load points
             with open(self.file_path, 'r') as file:
                 lines = file.readlines()
                 self.points.clear()
@@ -61,6 +70,7 @@ class BeamApp:
             messagebox.showerror("Input Error", "Please load points from a file first.")
             return
 
+        # Extract values for plotting
         x_values = [point['x'] for point in self.points]
         y_values = [0 for _ in self.points]
         labels = [point['name'] for point in self.points]
@@ -68,10 +78,12 @@ class BeamApp:
         moments = [point['moment'] for point in self.points]
         dist_forces = [point['dist_force'] for point in self.points]
 
+        # Plot the beam
         plt.figure()
         plt.plot(x_values, y_values, marker='o', linestyle='-', color='black', linewidth=5)  # Added line-width=5 here
 
         arrow_length = 0.1
+        # Draw distributed forces as arrows
         for i, (x, y, dist_force) in enumerate(zip(x_values, y_values, dist_forces)):
             if dist_force != 0:
                 arrow_length = 0.1
@@ -82,6 +94,7 @@ class BeamApp:
                                    head_width=0.1, head_length=0.05, color=arrow_color)
                 plt.gca().add_patch(arrow)
 
+        # Draw rectangles for distributed forces
         for i in range(len(self.points) - 1):
             x1, x2 = x_values[i], x_values[i + 1]
             dist_force1, dist_force2 = dist_forces[i], dist_forces[i + 1]
@@ -96,6 +109,7 @@ class BeamApp:
                 rect = Rectangle((rect_x, rect_y), width, height, color=color, alpha=0.6, linewidth=2)
                 plt.gca().add_patch(rect)
 
+        # Draw moments as arcs
         for x, y, moment, label in zip(x_values, y_values, moments, labels):
             if moment != 0:
                 radius = 0.15  # Radius of the semicircle
@@ -126,6 +140,7 @@ class BeamApp:
                 plt.gca().add_patch(arrow)
                 plt.text(arrow_x, arrow_y - 0.05, arrow_label, color='g', ha='center', fontsize=16)
 
+        # Add labels and forces to the plot
         for i, (x, y, label, force) in enumerate(zip(x_values, y_values, labels, forces)):
             plt.text(x, y - 0.1, label, ha='center')
             if force != 0:
@@ -140,18 +155,23 @@ class BeamApp:
         plt.grid(False)
         plt.show()
 
+        # Enable the "Next Step" button after drawing
         self.next_step_button.config(state=tk.NORMAL)  # Enable the "Next Step" button after drawing
 
     def clear_points(self):
+        # Clear the points list and the listbox
         self.points.clear()
         self.points_listbox.delete(0, tk.END)
+        # Disable the "Next Step" button when points are cleared
         self.next_step_button.config(state=tk.DISABLED)  # Disable the "Next Step" button when points are cleared
 
     def next_step(self):
+        # Check if a file is loaded
         if self.file_path:
             print(f"Continuing with file: {self.file_path}")
             # Here you can add logic to continue with the next step using self.file_path
         else:
             print("No file loaded yet")
 
+        # Close the main window to proceed with the next step
         self.root.destroy()  # Close the main window to proceed with the next step
