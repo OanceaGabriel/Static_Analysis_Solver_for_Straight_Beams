@@ -157,17 +157,17 @@ class Section:
     # Displays center of mass and area of the section
     def display_section_properties(self, maximum_moment):
         self.__center_of_mass.display()
-        print(self.__area)
-        print("Iy= ", self.inertia_moment_y_calculation())
-        print("Iz= ", self.inertia_moment_z_calculation())
-        print("Izy= ", self.inertia_moment_zy_calculation())
-        print("Wz = ", self.rigidity_module_Wy())
-        print("Sigma_max = ", self.bending_stress_Sy_max(maximum_moment))
-        print("z_max = ", self.z_max())
+        print("Section area: ", self.__area, "mm^2")
+        print("Iy= ", self.inertia_moment_y_calculation(), "mm^4")
+        print("Iz= ", self.inertia_moment_z_calculation(), "mm^4")
+        print("Izy= ", self.inertia_moment_zy_calculation(), "mm^4")
+        print("Wz = ", self.rigidity_module_Wy(), "MPa")
+        print("Sigma_max = ", self.bending_stress_Sy_max(maximum_moment), "MPa")
+        print("z_max = ", self.z_max(), "mm")
         print("Bending stress in lower fiber (z = ", self.find_lower_fiber(), ") = ",
-              self.bending_stress_in_lower_fiber(maximum_moment))
+              self.bending_stress_in_lower_fiber(maximum_moment), "MPa")
         print("Bending stress in higher fiber (z = ", self.find_higher_fiber(), ")= ",
-              self.bending_stress_in_higher_fiber(maximum_moment))
+              self.bending_stress_in_higher_fiber(maximum_moment), "MPa")
 
     def plot_section(self, Y1, Y2):
         fig, axis = plt.subplots()

@@ -145,7 +145,7 @@ if integrity_check(axis_points):
                 [x.get_ma() for x in internal_forces_obj if x.get_ma() != 0])
     print(sum_y)
     print(sum_m)
-    print(sol)
+    print(sol, "[N]")
 
     for point in axis_points:
         point.set_ya(sol)
@@ -166,7 +166,7 @@ if integrity_check(axis_points):
     for segment in segments:
         if abs(maximum_bending_moment) < abs(segment.maximum_bending_moment()):
             maximum_bending_moment = segment.maximum_bending_moment()
-    print("Maximum bending moment: ", maximum_bending_moment)
+    print("Maximum bending moment: ", maximum_bending_moment, "N*m")
     section.display_section_properties(maximum_moment=abs(maximum_bending_moment))
 
     y1 = float(section.bending_stress_in_lower_fiber(maximum_bending_moment)) / 100

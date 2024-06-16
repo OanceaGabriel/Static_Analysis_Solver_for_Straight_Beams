@@ -7,7 +7,7 @@ class Section_Point:
         self.__z = z
 
     def display(self):
-        print(f"y={self.__y}, z={self.__z}")
+        print(f"Center of mass coordinates y={self.__y} mm, z={self.__z} mm")
 
     def get_y(self):
         return self.__y
